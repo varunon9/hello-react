@@ -9,16 +9,13 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-    res.render('login', { 
-    	pageTitle: 'Login',
+    res.render('index', { 
     	errorMessage: '' 
     });
 });
 
 router.get('/signup', function(req, res, next) {
-    res.render('signup', {
-    	pageTitle: 'Signup'
-    });
+    res.render('index');
 });
 
 router.post('/login', function(req, res, next) {
