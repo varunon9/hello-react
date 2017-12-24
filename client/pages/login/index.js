@@ -1,5 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { Redirect } from 'react-router';
+import axios from 'axios';
+
+import { config } from '../../utils/Config';
 
 export default class Login extends React.Component {
 
@@ -7,7 +11,9 @@ export default class Login extends React.Component {
 		super(props);
 		this.state = {
 			email: '',
-			password: ''
+			password: '',
+			error: '',
+			fireRedirect: false
 		};
 
 		this.handleEmailChange = this.handleEmailChange.bind(this);
@@ -17,7 +23,32 @@ export default class Login extends React.Component {
 
 	handleSubmit(e) {
 		e.preventDefault();
-		console.log(this.state);
+		const params = {
+			email: this.state.email,
+			password: this.state.password
+		};
+		axios.post(config.baseUrl + 'login', params)
+		    .then(response => {
+		    	if (response.data && response.data.success) {
+		    		
+		    		this.props.authenticate({
+		    			name: response.data.user.name,
+		    			email: response.data.user.email,
+		    			isLoggedIn: true
+		    		});
+
+		    		this.setState({
+		    			error: '',
+		    			fireRedirect: true
+		    		});
+		    	} else {
+		    		this.setState({
+		    			error: response.data.message
+		    		});
+		    	}
+		    }).catch(err => {
+		    	console.error(err);
+		    });
 	}
 
 	handleEmailChange(e) {
@@ -46,14 +77,17 @@ export default class Login extends React.Component {
 				            <label>Password:</label>
 				            <input type="password" class="form-control" onChange={this.handlePasswordChange} />
 				        </div>
-				        <button type="submit" class="btn btn-default">Submit</button>
+				        <button type="submit" class="btn btn-primary">Submit</button>
 			        </form>
 			        <br />
+			        <p class="text-danger">{this.state.error}</p>
 			        <p>
 			            New User? 
 			            <Link to={'/signup'}>Signup</Link>
 			        </p>
 			    </div>
+
+			    {this.state.fireRedirect && <Redirect to='/dashboard' push={true} />}
 			</div>
 		);
 	}

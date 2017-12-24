@@ -1,7 +1,9 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const router = express.Router();
 
-var env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development';
+const userService = require('../services/userService');
+const utilityService = require('../services/utilityService');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -9,58 +11,56 @@ router.get('/', function(req, res, next) {
 });
 
 router.get('/login', function(req, res, next) {
-    res.render('index', { 
-    	errorMessage: '' 
-    });
+    res.render('index');
 });
 
 router.get('/signup', function(req, res, next) {
     res.render('index');
 });
 
+
 router.post('/login', function(req, res, next) {
-	var params = req.body;
-	userService.login(params, function failureCallback(errorMessage) {
-		res.render('login', { 
-			pageTitle: 'Login',
-			errorMessage: 'Wrong Mobile No and Password!!'
-		});
-	}, function successCallback(user) {
-		var token = utilityService.getToken(user);
-        res.cookie('jwtToken', token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true }); // maxAge: 2 hours
-    	res.redirect('/api/dashboard');
-	});
-    
+	const params = req.body;
+	userService.login(params)
+	    .then(user => {
+			const token = utilityService.getToken(user);
+	        res.cookie('jwtToken', token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true }); // maxAge: 2 hours
+	    	res.json({
+	    		success: true,
+	    		user: user
+	    	});
+	    }).catch(err => {
+	    	res.json({ 
+	    		success: false, 
+	    		message: err 
+	    	}); 
+	    });
 });
 
 
 
 router.post('/signup', function(req, res, next) {
-	var params = req.body;
-	userService.signup(params, function failureCallback(errorMessage) {
-		res.json({
-			success: false,
-			message: errorMessage
-		});
-	}, function successCallback(user) {
-		var token = utilityService.getToken(user);
-        res.cookie('jwtToken', token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true }); // maxAge: 2 hours
-		res.json({
-			success: true
-		});
-
-		// sending welcome mail
-		utilityService.sendWelcomeMail(user);
-
-		// sending Welcome Message
-		utilityService.sendWelcomeMessage(user);
-	});
+	const params = req.body;
+	userService.signup(params)
+	    .then(user => {
+			const token = utilityService.getToken(user);
+	        res.cookie('jwtToken', token, { maxAge: 2 * 60 * 60 * 1000, httpOnly: true }); // maxAge: 2 hours
+	    	res.json({
+	    		success: true,
+	    		user: user
+	    	});
+	    }).catch(err => {
+	    	res.json({ 
+	    		success: false, 
+	    		message: err 
+	    	}); 
+	    });
     
 });
 
-router.get('/logout', function(req, res, next) {
+router.post('/logout', function(req, res, next) {
 	res.clearCookie('jwtToken');
-	res.redirect('/');
+	res.json({success: true});
 });
 
 module.exports = router;

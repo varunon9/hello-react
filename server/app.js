@@ -3,24 +3,30 @@
  * Date: 23 December, 2017
  */
 
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
 
-var bodyParser = require('body-parser');
-var cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 
-var env = process.env.NODE_ENV || 'development';
+const env = process.env.NODE_ENV || 'development';
+const config = require('./config/config.json')[env];
+
+const mongoose = require('mongoose');
+
+// making connection to database
+mongoose.connect(config.mongodbConnectionString);
 
 /**
  * Get all routes here
  */
-var indexRoutes = require('./routes/index');
+const indexRoutes = require('./routes/index');
 
-// api is for users
-var apiRoutes = require('./routes/api');
+// dashboard routes only after authentication
+const dashboardRoutes = require('./routes/dashboard');
 
-var app = express();
+const app = express();
 
 /**
  * Get all middlewares here
@@ -61,11 +67,11 @@ app.use(function(req, res, next) {
  */
 /*app.use('/dashboard', auth);*/
 app.use('/', indexRoutes);
-app.use('/api', apiRoutes);
+app.use('/dashboard', dashboardRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
-    var err = new Error('Not Found');
+    const err = new Error('Not Found');
     err.status = 404;
     next(err);
 });
