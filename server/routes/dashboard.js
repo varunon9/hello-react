@@ -40,13 +40,13 @@ router.post('/get/placeSuggestions', function(req, res, next) {
     const params = req.body;
 
     // uncomment this block if you don't have google autocomplete place API key
-    /*res.json({
+    res.json({
         success: true,
         suggestions: ['Patna', 'Ranchi', 'Delhi', 'Bangalore', 'Chandigarh', 'Hyderabad']
-    });*/
+    });
 
     // comment this block if you don't have google autocomplete place API key
-    utilityService.suggestPlaces(params)
+    /*utilityService.suggestPlaces(params)
         .then(predictions => {
             let suggestions = [];
             predictions.forEach(place => {
@@ -63,7 +63,7 @@ router.post('/get/placeSuggestions', function(req, res, next) {
                 success: false,
                 message: err
             });
-        });
+        });*/
 });
 
 router.post('/save/searchedPlace', function(req, res, next) {
