@@ -2,13 +2,13 @@
   "development": {
     "mongodbConnectionString": "mongodb://localhost/helloReact",
     "superSecret": "M3rnStackSup3rS3cr3t",
-    "placeApiKey": "AIzaSyDoQZy17umVbLN73e3m1xXQmg3EyMtA3a0",
+    "placeApiKey": "Insert Your Google Place Autocomplete API here",
     "placeApiUrl": "https://maps.googleapis.com/maps/api/place/autocomplete/json?"
   },
   "production": {
     "mongodbConnectionString": "mongodb://localhost/helloReact",
     "superSecret": "M3rnStackSup3rS3cr3t",
-    "placeApiKey": "AIzaSyDoQZy17umVbLN73e3m1xXQmg3EyMtA3a0",
+    "placeApiKey": "Insert Your Google Place Autocomplete API here",
     "placeApiUrl": "https://maps.googleapis.com/maps/api/place/autocomplete/json?"
   }
 }
