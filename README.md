@@ -35,4 +35,9 @@ A simple web app based on MERN stack (Mongo, Express, React, NodeJS and Webpack)
 |![Login Screen](./screenshots/login.png) | ![Signup Screen](./screenshots/signup.png)|
 |![Dashboard Screen](./screenshots/dashboard.png) | |
 
+### Other Resources-
+
+1. Getting started with react-native- https://github.com/varunon9/hello-react-native
+2. Admin Dashboard developed in react, redux, node.js - https://github.com/varunon9/admin-panel-template-react
+
 #### For query/issues create Github issue or contact: varunon9@gmail.com
